@@ -51,7 +51,7 @@ public class UserServiceTest
     public void AddUser_If_Birth_Month_Or_Birthday_Is_Later_Than_Date_Now_Decrement_Age_Should_Return_True()
     {
         var userService = new UserService();
-        var result = userService.AddUser("John", "Doe", "johndoe@gmail.com", DateTime.Parse("2003-03-31"), 1);
+        var result = userService.AddUser("John", "Doe", "johndoe@gmail.com", DateTime.Parse("2003-04-01"), 1);
         Assert.False(result);
     }
     
