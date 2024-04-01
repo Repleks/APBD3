@@ -34,12 +34,7 @@ namespace LegacyApp
 
         private static bool CheckIfClientHasSomeCreditLimit(User user)
         {
-            if (user.HasCreditLimit && user.CreditLimit < 500)
-            {
-                return false;
-            }
-
-            return true;
+            return !user.HasCreditLimit || user.CreditLimit >= 500;
         }
 
         private static void SetClientCreditLimitBasedOnType(Client client, User user)
@@ -53,22 +48,18 @@ namespace LegacyApp
                 }
                 case "ImportantClient":
                 {
-                    using (var userCreditService = new UserCreditService())
-                    {
-                        int creditLimit = userCreditService.GetCreditLimit(user.LastName, user.DateOfBirth);
-                        creditLimit = creditLimit * 2;
-                        user.CreditLimit = creditLimit;
-                    }
+                    using var userCreditService = new UserCreditService();
+                    var creditLimit = userCreditService.GetCreditLimit(user.LastName, user.DateOfBirth);
+                    creditLimit = creditLimit * 2;
+                    user.CreditLimit = creditLimit;
                     break;
                 }
                 default:
                 {
                     user.HasCreditLimit = true;
-                    using (var userCreditService = new UserCreditService())
-                    {
-                        int creditLimit = userCreditService.GetCreditLimit(user.LastName, user.DateOfBirth);
-                        user.CreditLimit = creditLimit;
-                    }
+                    using var userCreditService = new UserCreditService();
+                    var creditLimit = userCreditService.GetCreditLimit(user.LastName, user.DateOfBirth);
+                    user.CreditLimit = creditLimit;
                     break;
                 }
             }
